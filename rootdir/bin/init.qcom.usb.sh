@@ -59,19 +59,6 @@ if [ "$(getprop persist.vendor.usb.config)" == "" -a "$(getprop ro.build.type)" 
 	if [ "$esoc_name" == "" ]; then
 	#setprop persist.vendor.usb.config adb
 		case "$soc_hwplatform" in
-			"ALIOTH")
-				if [ "$(getprop ro.boot.factorybuild)" == "1" ]; then
-					setprop persist.vendor.usb.config diag,diag_mdm,qdss,qdss_mdm,serial_cdev,dpl,rmnet,adb
-				elif [ "$buildvariant" = "eng" ]; then
-					setprop persist.vendor.usb.config diag,diag_mdm,qdss,qdss_mdm,serial_cdev,dpl,rmnet,adb
-				else
-					if [ -z "$debuggable" -o "$debuggable" = "1"  ]; then
-						setprop persist.vendor.usb.config adb
-					else
-						setprop persist.vendor.usb.config none
-					fi
-				fi
-			;;
 			"COURBET" | "SWEET" | "VAYU")
 				if [ "$(getprop ro.boot.factorybuild)" == "1" ]; then
 					setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,qdss,adb
@@ -117,39 +104,6 @@ if [ "$(getprop persist.vendor.usb.config)" == "" -a "$(getprop ro.build.type)" 
 		    ;;
 		    *)
 	            case "$target" in
-	              "msm8996")
-	                  setprop persist.vendor.usb.config diag,serial_cdev,serial_tty,rmnet_ipa,mass_storage,adb
-		      ;;
-	              "msm8909")
-		          setprop persist.vendor.usb.config diag,serial_smd,rmnet_qti_bam,adb
-		      ;;
-	              "msm8937")
-			    if [ -d /config/usb_gadget ]; then
-				       setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,adb
-			    else
-			               case "$soc_id" in
-				               "313" | "320")
-				                  setprop persist.vendor.usb.config diag,serial_smd,rmnet_ipa,adb
-				               ;;
-				               *)
-				                  setprop persist.vendor.usb.config diag,serial_smd,rmnet_qti_bam,adb
-				               ;;
-			               esac
-			    fi
-		      ;;
-	              "msm8953")
-			      if [ -d /config/usb_gadget ]; then
-				      setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,adb
-			      else
-				      setprop persist.vendor.usb.config diag,serial_smd,rmnet_ipa,adb
-			      fi
-		      ;;
-	              "msm8998" | "sdm660" | "apq8098_latv")
-		          setprop persist.vendor.usb.config diag,serial_cdev,rmnet,adb
-		      ;;
-	              "sdm845" | "sdm710")
-		          setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,adb
-		      ;;
 	              "msmnile" | "sm6150" | "trinket" | "lito" | "atoll" | "bengal" | "lahaina" | "holi")
 			  setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,qdss,adb
 		      ;;
@@ -224,14 +178,6 @@ diag_extra=`getprop persist.vendor.usb.config.extra`
 if [ "$diag_extra" == "" ]; then
 	setprop persist.vendor.usb.config.extra none
 fi
-
-# enable rps cpus on msm8937 target
-setprop vendor.usb.rps_mask 0
-case "$soc_id" in
-	"294" | "295" | "353" | "354")
-		setprop vendor.usb.rps_mask 40
-	;;
-esac
 
 #
 # Initialize UVC conifguration.
