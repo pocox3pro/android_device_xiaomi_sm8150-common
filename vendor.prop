@@ -122,6 +122,9 @@ ro.vendor.bluetooth.wipower=false
 vendor.bluetooth.soc=cherokee
 vendor.qcom.bluetooth.soc=cherokee
 
+# Charger
+ro.charger.enable_suspend=true
+
 # Camera
 vendor.camera.aux.packagelist=org.codeaurora.snapcam,com.xiaomi.cameratest,com.xiaomi.factory.mmi,com.xiaomi.runin
 
